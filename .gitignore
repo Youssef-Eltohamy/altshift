@@ -1,0 +1,6 @@
+# per-user configuration, created on first run
+settings.ini
+
+# compiled output
+*.exe
+build/
