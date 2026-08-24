@@ -1,0 +1,37 @@
+name: tests
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  selftest:
+    name: self-test (windows)
+    runs-on: windows-latest
+    env:
+      AHK_VERSION: 2.0.26
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Download AutoHotkey v2
+        shell: pwsh
+        run: |
+          $url = "https://github.com/AutoHotkey/AutoHotkey/releases/download/v$env:AHK_VERSION/AutoHotkey_$env:AHK_VERSION.zip"
+          Invoke-WebRequest $url -OutFile ahk.zip -UseBasicParsing
+          Expand-Archive ahk.zip -DestinationPath ahk -Force
+          if (-not (Test-Path 'ahk\AutoHotkey64.exe')) { throw 'AutoHotkey64.exe not found in the release archive' }
+
+      - name: Run self-test
+        shell: pwsh
+        run: |
+          $out = & '.\ahk\AutoHotkey64.exe' '.\AltShift.ahk' '--selftest' 2>&1 | Out-String
+          $code = $LASTEXITCODE
+          Write-Host $out
+          # the exit code is the contract: it equals the number of failed assertions
+          if ($code -ne 0) { throw "$code assertion(s) failed" }
+          if ($out -notmatch 'ALL TESTS PASSED') {
+              Write-Warning 'Exit code was 0 but the runner did not capture the test output.'
+          }

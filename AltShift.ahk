@@ -24,8 +24,7 @@ global en2ar := Map(
 global ar2en := BuildReverse(en2ar)
 
 if (A_Args.Length && A_Args[1] = "--selftest") {
-    RunSelfTest()
-    ExitApp
+    ExitApp(RunSelfTest())          ; exit code = number of failures, so CI can rely on it
 }
 
 
@@ -245,4 +244,5 @@ RunSelfTest() {
     if !Check("harakat",           EnToAr("QWERA"), "ًٌَُِ")
         fails++
     FileAppend("`n" (fails ? fails " FAILED" : "ALL TESTS PASSED") "`n", "*", "UTF-8")
+    return fails
 }

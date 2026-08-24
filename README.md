@@ -8,6 +8,7 @@
 
 *Named after the muscle memory it replaces.*
 
+[![tests](https://github.com/Youssef-Eltohamy/altshift/actions/workflows/test.yml/badge.svg)](https://github.com/Youssef-Eltohamy/altshift/actions/workflows/test.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-FC6710.svg)](LICENSE)
 [![Platform](https://img.shields.io/badge/platform-Windows-0078D4.svg)](#)
 [![AutoHotkey](https://img.shields.io/badge/AutoHotkey-v2-2ea44f.svg)](https://www.autohotkey.com/)
