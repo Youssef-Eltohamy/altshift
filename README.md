@@ -1,10 +1,12 @@
 <div align="center">
 
-<img src="assets/preview-256.png" width="120" alt="KbLangFix">
+<img src="assets/preview-256.png" width="120" alt="AltShift">
 
-# KbLangFix
+# AltShift
 
 **Fix text you typed with the wrong keyboard layout — Arabic ⇄ English — with one shortcut.**
+
+*Named after the muscle memory it replaces.*
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-FC6710.svg)](LICENSE)
 [![Platform](https://img.shields.io/badge/platform-Windows-0078D4.svg)](#)
@@ -28,7 +30,7 @@ hgsghl ugd;l
 اثممخ صخقمي        →  hello world
 ```
 
-Today you delete it and retype. **KbLangFix** re-maps it by key position instead.
+Today you delete it and retype. **AltShift** re-maps it by key position instead.
 
 ## Usage
 
@@ -49,19 +51,19 @@ mostly Latin → convert to Arabic. Your clipboard is restored afterwards.
 **One line in PowerShell:**
 
 ```powershell
-irm https://raw.githubusercontent.com/Youssef-Eltohamy/kblangfix/main/install.ps1 | iex
+irm https://raw.githubusercontent.com/Youssef-Eltohamy/altshift/main/install.ps1 | iex
 ```
 
 Prefer to read a script before running it? Good instinct — download it first:
 
 ```powershell
-irm https://raw.githubusercontent.com/Youssef-Eltohamy/kblangfix/main/install.ps1 -OutFile install.ps1
+irm https://raw.githubusercontent.com/Youssef-Eltohamy/altshift/main/install.ps1 -OutFile install.ps1
 ```
 
 The installer only touches your machine: it installs AutoHotkey v2 through `winget` if it is missing,
-copies the files to `%LOCALAPPDATA%\KbLangFix`, adds a Startup shortcut, and launches it.
+copies the files to `%LOCALAPPDATA%\AltShift`, adds a Startup shortcut, and launches it.
 
-**Manual:** install [AutoHotkey v2](https://www.autohotkey.com/), clone this repo, double-click `KbLangFix.ahk`.
+**Manual:** install [AutoHotkey v2](https://www.autohotkey.com/), clone this repo, double-click `AltShift.ahk`.
 
 ## Settings
 
@@ -105,10 +107,10 @@ Symbols and digits are deliberately left untouched — you rarely want `2024` or
 
 ```powershell
 # unit tests - the character maps, both directions
-& "$env:LOCALAPPDATA\Programs\AutoHotkey\v2\AutoHotkey64.exe" KbLangFix.ahk --selftest
+& "$env:LOCALAPPDATA\Programs\AutoHotkey\v2\AutoHotkey64.exe" AltShift.ahk --selftest
 
 # end-to-end - drives a real edit control through the real hotkey
-& "$env:LOCALAPPDATA\Programs\AutoHotkey\v2\AutoHotkey64.exe" KbLangFix.test.ahk
+& "$env:LOCALAPPDATA\Programs\AutoHotkey\v2\AutoHotkey64.exe" AltShift.test.ahk
 
 # regenerate the icon set
 pwsh -File assets/build-icon.ps1

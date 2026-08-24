@@ -1,4 +1,4 @@
-# Builds the simplified KbLangFix mark: multi-size .ico + PNG previews.
+# Builds the simplified AltShift mark: multi-size .ico + PNG previews.
 # Brand colors sampled from sign.png -> orange #FC6710, white #FDFDFD, black tile.
 Add-Type -AssemblyName System.Drawing
 
@@ -91,7 +91,7 @@ $t.Save((Join-Path $OUT "mark-transparent-512.png"), [System.Drawing.Imaging.Ima
 $t.Dispose()
 
 # --- pack the .ico -----------------------------------------------------
-$icoPath = Join-Path $OUT "kblangfix.ico"
+$icoPath = Join-Path $OUT "altshift.ico"
 $fs = [System.IO.File]::Create($icoPath)
 $bw = New-Object System.IO.BinaryWriter $fs
 $bw.Write([uint16]0); $bw.Write([uint16]1); $bw.Write([uint16]$frames.Count)

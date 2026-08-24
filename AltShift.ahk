@@ -1,7 +1,7 @@
 ﻿#Requires AutoHotkey v2.0
 #SingleInstance Force
 ; ---------------------------------------------------------------
-;  KbLangFix - fix text typed with the wrong keyboard layout
+;  AltShift - fix text typed with the wrong keyboard layout
 ;  Select the text  ->  press Ctrl+Alt+X
 ;  Converts EN<->AR by key position AND switches the input language
 ; ---------------------------------------------------------------
@@ -36,10 +36,10 @@ global gBadKey := ""
 global gEnabled := true
 
 LoadSettings()
-try TraySetIcon(A_ScriptDir "\assets\kblangfix.ico")
+try TraySetIcon(A_ScriptDir "\assets\altshift.ico")
 InitTray()
 if (gBadKey != "")
-    TrayTip("اختصار غير صالح فى settings.ini: " gBadKey "`nتم الرجوع إلى Ctrl+Alt+X", "KbLangFix", "Icon!")
+    TrayTip("اختصار غير صالح فى settings.ini: " gBadKey "`nتم الرجوع إلى Ctrl+Alt+X", "AltShift", "Icon!")
 
 LoadSettings() {
     global gHotkey, gBadKey, LID_AR
@@ -101,7 +101,7 @@ OpenSettings() {
 }
 
 SetTip() {
-    A_IconTip := gEnabled ? "KbLangFix — " PrettyHotkey(gHotkey) : "KbLangFix — متوقف"
+    A_IconTip := gEnabled ? "AltShift — " PrettyHotkey(gHotkey) : "AltShift — متوقف"
 }
 
 ToggleEnabled(name, pos, m) {

@@ -1,10 +1,10 @@
 ﻿#Requires AutoHotkey v2.0
 SendLevel 1
 SetKeyDelay 40, 40
-g := Gui("+AlwaysOnTop", "KbLangFix Integration Test")
+g := Gui("+AlwaysOnTop", "AltShift Integration Test")
 ed := g.Add("Edit", "w420 h90")
 g.Show()
-WinWaitActive("KbLangFix Integration Test", , 5)
+WinWaitActive("AltShift Integration Test", , 5)
 Sleep 600
 
 Trial(input, expect, label) {
