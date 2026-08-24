@@ -2,8 +2,3 @@
 ; Hotkey syntax:  ^ = Ctrl   ! = Alt   + = Shift   # = Win
 ; Examples:  ^!x  (Ctrl+Alt+X)   ^!+x  (Ctrl+Alt+Shift+X)   ^!q  (Ctrl+Alt+Q)
 Hotkey=^!x
-
-; Which Arabic layout to switch the window to after a fix.
-;   00000401 = Arabic (Saudi Arabia)
-;   00000c01 = Arabic (Egypt)
-ArabicLayout=00000401

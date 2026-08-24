@@ -6,8 +6,8 @@
 ;  Converts EN<->AR by key position AND switches the input language
 ; ---------------------------------------------------------------
 
-global LID_AR := "00000401"   ; Arabic (Saudi). Egypt = 00000c01
-global LID_EN := "00000409"   ; English (US)
+global LANG_AR := 0x01        ; primary language id for Arabic
+global LANG_EN := 0x09        ; primary language id for English
 
 global en2ar := Map(
     "q","ض", "w","ص", "e","ث", "r","ق", "t","ف", "y","غ", "u","ع", "i","ه",
@@ -42,9 +42,8 @@ if (gBadKey != "")
     TrayTip("اختصار غير صالح فى settings.ini: " gBadKey "`nتم الرجوع إلى Ctrl+Alt+X", "AltShift", "Icon!")
 
 LoadSettings() {
-    global gHotkey, gBadKey, LID_AR
+    global gHotkey, gBadKey
     gHotkey := Trim(IniRead(INI, "General", "Hotkey", "^!x"))
-    LID_AR  := Trim(IniRead(INI, "General", "ArabicLayout", "00000401"))
     if (gHotkey = "")
         gHotkey := "^!x"
     try {
@@ -96,7 +95,7 @@ InitTray() {
 
 OpenSettings() {
     if !FileExist(INI)
-        FileAppend("[General]`n; Hotkey syntax: ^=Ctrl  !=Alt  +=Shift  #=Win`nHotkey=^!x`n; 00000401 = Arabic (Saudi), 00000c01 = Arabic (Egypt)`nArabicLayout=00000401`n", INI, "UTF-8")
+        FileAppend("[General]`n; Hotkey syntax: ^=Ctrl  !=Alt  +=Shift  #=Win`nHotkey=^!x`n", INI, "UTF-8")
     Run('notepad.exe "' INI '"')
 }
 
@@ -145,15 +144,30 @@ ArToEn(s) {
     return out
 }
 
-SetLayout(lid) {
+
+; Switches the active window to a keyboard layout the user ALREADY has installed.
+; It deliberately never calls LoadKeyboardLayout: loading a layout that is not in
+; the user's list adds a duplicate entry to the language bar for the whole session.
+SetLayout(primaryLang) {
     hwnd := WinExist("A")
     if !hwnd
         return
-    hkl := DllCall("LoadKeyboardLayout", "Str", lid, "UInt", 0x00000001, "Ptr")
+    hkl := FindLoadedLayout(primaryLang)
     if hkl
         PostMessage(0x0050, 0, hkl, , "ahk_id " hwnd)   ; WM_INPUTLANGCHANGEREQUEST
 }
 
+FindLoadedLayout(primaryLang) {
+    static MAXN := 32
+    buf := Buffer(A_PtrSize * MAXN, 0)
+    n   := DllCall("GetKeyboardLayoutList", "Int", MAXN, "Ptr", buf, "Int")
+    Loop n {
+        hkl := NumGet(buf, (A_Index - 1) * A_PtrSize, "Ptr")
+        if (((hkl & 0xFFFF) & 0x3FF) = primaryLang)
+            return hkl
+    }
+    return 0
+}
 FixSelection() {
     if !gEnabled
         return
@@ -181,10 +195,10 @@ FixSelection() {
     }
     if (ar > en) {
         out := ArToEn(txt)
-        target := LID_EN
+        target := LANG_EN
     } else {
         out := EnToAr(txt)
-        target := LID_AR
+        target := LANG_AR
     }
     A_Clipboard := out
     ClipWait(1.0)

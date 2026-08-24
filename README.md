@@ -73,9 +73,6 @@ Right-click the tray icon → **فتح الإعدادات**, or edit `settings.i
 [General]
 ; ^ = Ctrl   ! = Alt   + = Shift   # = Win
 Hotkey=^!x
-
-; 00000401 = Arabic (Saudi Arabia),  00000c01 = Arabic (Egypt)
-ArabicLayout=00000401
 ```
 
 Press <kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>R</kbd> to reload after editing.
@@ -86,10 +83,14 @@ If the hotkey is invalid the script falls back to <kbd>Ctrl</kbd>+<kbd>Alt</kbd>
 The two layouts put different characters on the same physical keys. `h` on a US layout and `ا` on
 Arabic 101 are the same key, so the fix is a character-for-character re-map, not a translation.
 
-Two details that are easy to get wrong:
+Three details that are easy to get wrong:
 
 - **Ligature keys.** On Arabic 101, `b` produces two characters (`لا`), and <kbd>Shift</kbd>+`g/t/b`
   produce `لأ` / `لإ` / `لآ`. The reverse pass reads two characters ahead before falling back to one.
+- **It never installs a keyboard layout.** Switching with `LoadKeyboardLayout` on a hardcoded id adds a
+  duplicate entry to the language bar for the whole session if the user does not already have that exact
+  variant. Instead the script enumerates the layouts Windows has already loaded and picks the Arabic or
+  English one the user actually has, whichever variant that is.
 - **Copy/paste uses scan codes, not letters.** The script changes the active keyboard layout, and
   AutoHotkey resolves `Send "^c"` *through the active layout* — under an Arabic layout there is no
   `c` key to resolve, so the copy silently fails. `Send "^{sc02E}"` addresses the physical key and is
@@ -134,6 +135,6 @@ MIT — see [LICENSE](LICENSE).
 
 **التسطيب:** سطر واحد فى `PowerShell` موجود فوق فى قسم `Install`، وبيسطّب `AutoHotkey v2` لوحده لو مش موجود.
 
-**الإعدادات:** كليك يمين على أيقونة شريط المهام ← «فتح الإعدادات». تقدر تغيّر الاختصار، وتختار العربية المصرية `00000c01` بدل السعودية.
+**الإعدادات:** كليك يمين على أيقونة شريط المهام ← «فتح الإعدادات». تقدر تغيّر الاختصار من هناك.
 
 </div>
