@@ -35,3 +35,34 @@ jobs:
           if ($out -notmatch 'ALL TESTS PASSED') {
               Write-Warning 'Exit code was 0 but the runner did not capture the test output.'
           }
+
+  install:
+    name: one-liner install on a clean machine
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      # Same code path as `irm ... | iex`: no $PSScriptRoot, so every file is fetched
+      # over HTTP from this exact commit, and AutoHotkey is downloaded and checksum-verified.
+      - name: Install
+        shell: powershell
+        run: |
+          $raw = "https://raw.githubusercontent.com/$env:GITHUB_REPOSITORY/$env:GITHUB_SHA"
+          $sb  = [scriptblock]::Create((Get-Content -Raw .\install.ps1))
+          & $sb -RepoRaw $raw -NoStartup -NoLaunch
+          if (-not (Test-Path "$env:LOCALAPPDATA\AltShift\ahk\AutoHotkey64.exe")) { throw 'portable AutoHotkey missing' }
+          if (-not (Test-Path "$env:LOCALAPPDATA\AltShift\settings.ini"))        { throw 'settings.ini missing' }
+
+      - name: Re-run is idempotent
+        shell: powershell
+        run: |
+          $out = .\install.ps1 -NoStartup -NoLaunch 2>&1 | Out-String
+          Write-Host $out
+          if ($out -notmatch 'already in')          { throw 'second run re-downloaded AutoHotkey' }
+          if ($out -notmatch 'kept your existing')  { throw 'second run replaced settings.ini' }
+
+      - name: Uninstall
+        shell: powershell
+        run: |
+          .\uninstall.ps1
+          if (Test-Path "$env:LOCALAPPDATA\AltShift") { throw 'uninstall left files behind' }

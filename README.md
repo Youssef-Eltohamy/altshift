@@ -58,10 +58,36 @@ Prefer to read a script before running it? Good instinct. Download it first:
 irm https://raw.githubusercontent.com/Youssef-Eltohamy/altshift/main/install.ps1 -OutFile install.ps1
 ```
 
-The installer only touches your machine: it installs AutoHotkey v2 through `winget` if it is missing,
-copies the files to `%LOCALAPPDATA%\AltShift`, adds a Startup shortcut, and launches it.
+No admin rights, no `winget`, nothing installed system-wide. The script:
+
+1. downloads a **pinned, checksum-verified** portable copy of AutoHotkey v2 (about 3 MB) into `%LOCALAPPDATA%\AltShift\ahk`;
+2. copies `AltShift.ahk` next to it and runs its self-test;
+3. adds a Startup shortcut and launches the tool.
+
+Re-running it is safe: it keeps your `settings.ini` and skips the download if the same version is already there.
+
+**Options** (the same one-liner, wrapped so it accepts parameters):
+
+```powershell
+& ([scriptblock]::Create((irm https://raw.githubusercontent.com/Youssef-Eltohamy/altshift/main/install.ps1))) -NoStartup
+```
+
+| Flag | Effect |
+|------|--------|
+| `-NoStartup` | do not run at login |
+| `-NoLaunch` | install only, do not start it now |
+| `-Dest <path>` | install somewhere other than `%LOCALAPPDATA%\AltShift` |
 
 **Manual:** install [AutoHotkey v2](https://www.autohotkey.com/), clone this repo, double-click `AltShift.ahk`.
+
+## Uninstall
+
+```powershell
+irm https://raw.githubusercontent.com/Youssef-Eltohamy/altshift/main/uninstall.ps1 | iex
+```
+
+Stops the running copy, removes the Startup shortcut and deletes `%LOCALAPPDATA%\AltShift` (including your
+`settings.ini`). Nothing else on the machine is touched.
 
 ## Settings
 
@@ -105,15 +131,24 @@ Symbols and digits are deliberately left untouched, you rarely want `2024` or `@
 ## Development
 
 ```powershell
-# unit tests - the character maps, both directions
-& "$env:LOCALAPPDATA\Programs\AutoHotkey\v2\AutoHotkey64.exe" AltShift.ahk --selftest
+# the interpreter the installer put down (or use your own AutoHotkey v2 install)
+$ahk = "$env:LOCALAPPDATA\AltShift\ahk\AutoHotkey64.exe"
+
+# unit tests - the character maps, both directions; exit code = number of failures
+& $ahk AltShift.ahk --selftest
 
 # end-to-end - drives a real edit control through the real hotkey
-& "$env:LOCALAPPDATA\Programs\AutoHotkey\v2\AutoHotkey64.exe" AltShift.test.ahk
+& $ahk AltShift.test.ahk
+
+# install from the working copy instead of GitHub
+.\install.ps1 -NoStartup
 
 # regenerate the icon set
 pwsh -File assets/build-icon.ps1
 ```
+
+CI runs the self-test on every push, and also runs `install.ps1` end-to-end on a clean `windows-latest`
+runner so the one-liner is proven against a machine that has never seen AutoHotkey.
 
 ## License
 
@@ -131,7 +166,9 @@ MIT, see [LICENSE](LICENSE).
 
 الاتجاه بيتحدد أوتوماتيك حسب نوع الحروف فى التحديد، والكليبورد بيرجع لحالته بعد العملية.
 
-**التسطيب:** سطر واحد فى `PowerShell` موجود فوق فى قسم `Install`، وبيسطّب `AutoHotkey v2` لوحده لو مش موجود.
+**التسطيب:** افتح `PowerShell` والزق السطر اللى فى قسم `Install` فوق. من غير صلاحيات أدمن، ومن غير تسطيب أى حاجة على مستوى الجهاز: بيحمّل نسخة محمولة من `AutoHotkey v2` متحقق منها بـ`checksum` جوه `%LOCALAPPDATA%\AltShift`، وبيشغّل اختبار ذاتى، وبيضيف اختصار فى `Startup`. تشغيله تانى آمن وبيحافظ على إعداداتك.
+
+**الإزالة:** سطر واحد فى قسم `Uninstall` بيوقف الأداة ويمسح المجلد واختصار الـ`Startup`، ومش بيلمس أى حاجة تانية على الجهاز.
 
 **الإعدادات:** كليك يمين على أيقونة شريط المهام ← «فتح الإعدادات». تقدر تغيّر الاختصار من هناك.
 

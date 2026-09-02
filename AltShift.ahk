@@ -213,7 +213,8 @@ RunSelfTest() {
     fails := 0
     Check(label, got, want) {
         ok := (got = want)
-        FileAppend((ok ? "PASS  " : "FAIL  ") . label . "  got=[" got "] want=[" want "]`n", "*", "UTF-8")
+        ; stdout only exists when launched from a console; the exit code is the contract either way
+        try FileAppend((ok ? "PASS  " : "FAIL  ") . label . "  got=[" got "] want=[" want "]`n", "*", "UTF-8")
         return ok
     }
     if !Check("en->ar salam",      EnToAr("hgsghl ugd;l"), "السلام عليكم")
@@ -243,6 +244,6 @@ RunSelfTest() {
         fails++
     if !Check("harakat",           EnToAr("QWERA"), "ًٌَُِ")
         fails++
-    FileAppend("`n" (fails ? fails " FAILED" : "ALL TESTS PASSED") "`n", "*", "UTF-8")
+    try FileAppend("`n" (fails ? fails " FAILED" : "ALL TESTS PASSED") "`n", "*", "UTF-8")
     return fails
 }
