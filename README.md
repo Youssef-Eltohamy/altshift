@@ -1,17 +1,17 @@
 <div align="center">
 
-<img src="assets/preview-256.png" width="120" alt="AltShift">
+<img src=".github/banner.png" alt="AltShift" width="100%">
 
-# AltShift
-
-**Fix text you typed with the wrong keyboard layout — Arabic ⇄ English — with one shortcut.**
+**Fix text you typed with the wrong keyboard layout (Arabic and English) with one shortcut.**
 
 *Named after the muscle memory it replaces.*
 
 [![tests](https://github.com/Youssef-Eltohamy/altshift/actions/workflows/test.yml/badge.svg)](https://github.com/Youssef-Eltohamy/altshift/actions/workflows/test.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-FC6710.svg)](LICENSE)
-[![Platform](https://img.shields.io/badge/platform-Windows-0078D4.svg)](#)
+[![Platform](https://img.shields.io/badge/platform-Windows-0078D4.svg)](#install)
 [![AutoHotkey](https://img.shields.io/badge/AutoHotkey-v2-2ea44f.svg)](https://www.autohotkey.com/)
+
+[The problem](#the-problem) · [Usage](#usage) · [Install](#install) · [How it works](#how-it-works) · [بالعربى](#بالعربى)
 
 </div>
 
@@ -25,7 +25,7 @@ You start typing in Arabic, but the keyboard was still on English. You end up wi
 hgsghl ugd;l
 ```
 
-...instead of `السلام عليكم`. Or the reverse — English typed while the layout was Arabic:
+...instead of `السلام عليكم`. Or the reverse, English typed while the layout was Arabic:
 
 ```
 اثممخ صخقمي        →  hello world
@@ -39,13 +39,10 @@ Today you delete it and retype. **AltShift** re-maps it by key position instead.
 2. Press <kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>X</kbd>.
 
 The text is replaced in place **and the window's input language is switched**, so you can keep typing
-correctly — exactly as if you had pressed <kbd>Alt</kbd>+<kbd>Shift</kbd> and retyped the whole thing.
+correctly, exactly as if you had pressed <kbd>Alt</kbd>+<kbd>Shift</kbd> and retyped the whole thing.
 
 The direction is detected automatically from the selection: mostly Arabic → convert to English,
 mostly Latin → convert to Arabic. Your clipboard is restored afterwards.
-
-<!-- Record a short screen capture (ScreenToGif) and drop it here as assets/demo.gif -->
-<!-- ![demo](assets/demo.gif) -->
 
 ## Install
 
@@ -55,7 +52,7 @@ mostly Latin → convert to Arabic. Your clipboard is restored afterwards.
 irm https://raw.githubusercontent.com/Youssef-Eltohamy/altshift/main/install.ps1 | iex
 ```
 
-Prefer to read a script before running it? Good instinct — download it first:
+Prefer to read a script before running it? Good instinct. Download it first:
 
 ```powershell
 irm https://raw.githubusercontent.com/Youssef-Eltohamy/altshift/main/install.ps1 -OutFile install.ps1
@@ -93,7 +90,7 @@ Three details that are easy to get wrong:
   variant. Instead the script enumerates the layouts Windows has already loaded and picks the Arabic or
   English one the user actually has, whichever variant that is.
 - **Copy/paste uses scan codes, not letters.** The script changes the active keyboard layout, and
-  AutoHotkey resolves `Send "^c"` *through the active layout* — under an Arabic layout there is no
+  AutoHotkey resolves `Send "^c"` *through the active layout*: under an Arabic layout there is no
   `c` key to resolve, so the copy silently fails. `Send "^{sc02E}"` addresses the physical key and is
   immune to this. Without it the tool breaks itself on the second use.
 
@@ -103,7 +100,7 @@ Three details that are easy to get wrong:
 come from either the single key `b` or the pair `g`+`h`. The script prefers `b`, since a lone `b` is far
 more common in English than the digraph `gh`. This is covered by an explicit test rather than hidden.
 
-Symbols and digits are deliberately left untouched — you rarely want `2024` or `@gmail.com` rewritten.
+Symbols and digits are deliberately left untouched, you rarely want `2024` or `@gmail.com` rewritten.
 
 ## Development
 
@@ -120,7 +117,7 @@ pwsh -File assets/build-icon.ps1
 
 ## License
 
-MIT — see [LICENSE](LICENSE).
+MIT, see [LICENSE](LICENSE).
 
 ---
 
@@ -130,7 +127,7 @@ MIT — see [LICENSE](LICENSE).
 
 بتبدأ تكتب عربى والكيبورد لسه على الإنجليزى، فيطلع كلام مكرقط زى `hgsghl ugd;l` بدل «السلام عليكم».
 
-**الحل:** حدّد الجملة واضغط <kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>X</kbd>. النص بيتصلح مكانه، ولغة الإدخال بتتبدّل كمان عشان تكمل كتابة صح — كأنك ضغطت <kbd>Alt</kbd>+<kbd>Shift</kbd> وكتبت الجملة تانى.
+**الحل:** حدّد الجملة واضغط <kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>X</kbd>. النص بيتصلح مكانه، ولغة الإدخال بتتبدّل كمان عشان تكمل كتابة صح، كأنك ضغطت <kbd>Alt</kbd>+<kbd>Shift</kbd> وكتبت الجملة تانى.
 
 الاتجاه بيتحدد أوتوماتيك حسب نوع الحروف فى التحديد، والكليبورد بيرجع لحالته بعد العملية.
 
