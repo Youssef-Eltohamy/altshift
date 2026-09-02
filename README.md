@@ -38,6 +38,8 @@ Today you delete it and retype. **AltShift** re-maps it by key position instead.
 1. Select the mistyped text.
 2. Press <kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>X</kbd>.
 
+<p align="center"><img src="assets/demo.gif" width="720" alt="AltShift demo: hgsghl ugd;l becomes السلام عليكم"></p>
+
 The text is replaced in place **and the window's input language is switched**, so you can keep typing
 correctly, exactly as if you had pressed <kbd>Alt</kbd>+<kbd>Shift</kbd> and retyped the whole thing.
 
