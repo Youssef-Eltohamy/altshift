@@ -56,7 +56,7 @@ jobs:
       - name: Re-run is idempotent
         shell: powershell
         run: |
-          $out = .\install.ps1 -NoStartup -NoLaunch 2>&1 | Out-String
+          $out = .\install.ps1 -NoStartup -NoLaunch *>&1 | Out-String
           Write-Host $out
           if ($out -notmatch 'already in')          { throw 'second run re-downloaded AutoHotkey' }
           if ($out -notmatch 'kept your existing')  { throw 'second run replaced settings.ini' }
